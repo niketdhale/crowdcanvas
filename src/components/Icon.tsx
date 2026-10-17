@@ -11,6 +11,7 @@ const ICONS: Record<string, ReactNode> = {
   arrowDown: <path d="M12 5v14M5 12l7 7 7-7" />,
   grid: (<><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /></>),
   x: <path d="M18 6 6 18M6 6l12 12" />,
+  flag: <path d="M4 22V4M4 4h13l-2 4 2 4H4" />,
   share: (<><circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" /><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4" /></>),
 }
 

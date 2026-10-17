@@ -43,7 +43,7 @@ export function UploadForm({ onPublished }: { onPublished: () => void | Promise<
       const { data } = supabase.storage.from(BUCKET).getPublicUrl(path)
       const { error: insErr } = await supabase.from('posters').insert({ title: t, caption: caption.trim(), image_path: path, image_url: data.publicUrl, target_url: targetUrl })
       if (insErr) throw insErr
-      say('Poster published to the global gallery. Thank you!')
+      say('Thanks! Your poster is awaiting review.')
       setTitle(''); setCaption(''); setLink(''); setFile(null)
       if (fileRef.current) fileRef.current.value = ''
       await onPublished()
@@ -77,7 +77,7 @@ export function UploadForm({ onPublished }: { onPublished: () => void | Promise<
         </button>
       </div>
       <p className={'status' + (status.error ? ' error' : '')} role="status" aria-live="polite">{status.text}</p>
-      <p className="safety">By publishing, you confirm you own the image or have permission to share it. Do not upload personal information, hateful content, or copyrighted work you don't have rights to. This MVP publishes uploads immediately and has no moderator dashboard; use only for a small test until moderation and abuse controls are added.</p>
+      <p className="safety">By publishing, you confirm you own the image or have permission to share it. Do not upload personal information, hateful content, or copyrighted work you don't have rights to. Posters appear in the gallery after a moderator approves them.</p>
     </section>
   )
 }

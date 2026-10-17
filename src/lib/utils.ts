@@ -5,6 +5,9 @@ export interface Poster {
   image_url: string
   target_url: string | null
   created_at: string
+  image_path?: string
+  status?: 'pending' | 'approved' | 'hidden'
+  report_count?: number
 }
 
 export const MAX_BYTES = 5 * 1024 * 1024
@@ -41,3 +44,6 @@ export function prettyDate(value: string): string {
     return ''
   }
 }
+
+/** Admin queue: anything not approved, or approved but reported. */
+export const needsReview = (p: Poster) => p.status !== 'approved' || (p.report_count ?? 0) > 0

@@ -45,14 +45,19 @@ Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in `.env.local` for local w
 2. The upload form now accepts an optional destination URL. Use a full `https://` or `http://` URL. Posters with a URL open the destination in a new tab when clicked; posters without one remain non-clickable.
 3. The website only accepts HTTP(S) destinations and opens them with `rel="noopener noreferrer"` for safer new-tab behavior.
 
-## 6. Test
+## 6. Enable moderation, reports and upload limits
+1. In Supabase SQL Editor, run `supabase-migration-moderation.sql` (rewrites the `posters` policies: new uploads are `pending`, only `approved` posters are public; 3 reports auto-hide a poster; 5 uploads per IP per hour).
+2. Supabase -> Authentication -> Users -> Add user (email + password). Copy its UUID and run `insert into public.admins values ('<uuid>');`.
+3. Visit `/#admin`, sign in, then Approve / Hide / Delete queued and reported posters.
+
+## 7. Test
 - Open the deployed site in a private/incognito window.
 - Upload a small JPG/PNG/WebP with a title.
 - Refresh the page and open the URL on another device/browser. The poster should appear in the shared gallery.
 - If uploads fail, check the browser console and Supabase Storage/Table policies.
 
 ## Important limits and security
-- This first MVP publishes uploaded images immediately, without moderation or user accounts. It is vulnerable to spam, abusive images, and free-tier quota abuse. Keep the URL private during testing; add moderation, upload throttling/CAPTCHA, and admin removal before promoting publicly.
+- Uploads are moderated (section 6) and rate-limited per IP, but there is no CAPTCHA. Rejected uploads that hit the limit leave an orphaned image in storage.
 - The displayed gallery currently fetches the latest 100 posters. The counter is therefore the number loaded (up to 100), not a reliable lifetime/global visitor count. Add a database count endpoint or RPC for an accurate count.
 - Public uploads are not the same as secure monetization. Do not add payments until you have moderation, clear terms, and a reliable way to enforce the first-1,000 free slots.
 - Never put Supabase `service_role` or secret keys in frontend JavaScript.

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { filterPosters, normalizeDestination, validateFile, type Poster } from './utils'
+import { filterPosters, needsReview, normalizeDestination, validateFile, type Poster } from './utils'
 
 const p = (title: string, caption = ''): Poster => ({ title, caption, image_url: 'x', target_url: null, created_at: '2024-01-01' })
 
@@ -29,5 +29,14 @@ describe('validateFile', () => {
     expect(validateFile({ type: 'image/png', size: 100 })).toBeNull()
     expect(validateFile({ type: 'image/gif', size: 100 })).toMatch(/JPG/)
     expect(validateFile({ type: 'image/png', size: 6 * 1024 * 1024 })).toMatch(/5 MB/)
+  })
+})
+
+describe('needsReview', () => {
+  it('flags pending, hidden and reported posters only', () => {
+    expect(needsReview({ ...p('a'), status: 'pending' })).toBe(true)
+    expect(needsReview({ ...p('a'), status: 'hidden' })).toBe(true)
+    expect(needsReview({ ...p('a'), status: 'approved', report_count: 1 })).toBe(true)
+    expect(needsReview({ ...p('a'), status: 'approved', report_count: 0 })).toBe(false)
   })
 })
