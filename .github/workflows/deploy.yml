@@ -13,7 +13,7 @@ concurrency:
 jobs:
   build:
     # Only the original repo publishes; forks skip deployment.
-    if: github.repository_owner == 'Anuragdhale27'
+    if: ${{ !github.event.repository.fork }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
